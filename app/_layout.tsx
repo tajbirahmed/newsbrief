@@ -4,18 +4,25 @@ import { Slot } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native';
 
+import { TailwindProvider } from 'tailwind-rn';
+import utilities from '../tailwind.json';
+
 export const unstable_settings = {
     initialRouteName: '/',
 };
 
 const RootLayout = () => {
-    const bgval = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;    
+    const bgval = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
     return (
-        <ThemeProvider value={bgval}>
-            <AuthProvider>
-                <Slot />      
-            </AuthProvider>
-        </ThemeProvider>
+        <TailwindProvider utilities={utilities} colorScheme={"dark"} >
+            {/* <ThemeProvider value={bgval}> */}
+
+                <AuthProvider>
+                    <Slot />
+                </AuthProvider>
+
+            {/* </ThemeProvider> */ }
+        </TailwindProvider>
     )
 }
 

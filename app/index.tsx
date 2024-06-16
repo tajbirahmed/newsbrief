@@ -1,22 +1,39 @@
-import { View } from '@/components/Themed'
+import { View, Text } from '@/components/Themed'
 import { useAuth } from '@/contexts/AuthContext';
-import React from 'react'
-import { StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { DarkTheme } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { StyleSheet, useColorScheme } from 'react-native';
+import { DefaultTheme, TextInput } from 'react-native-paper';
+import { useTailwind } from 'tailwind-rn';
 
 const Home = () => {
   const {
     user,
     setUser
   } = useAuth();
+  const tw = useTailwind();
+  const [email, setEmail] = useState('');
+  const bgval = useColorScheme() == 'dark' ? DarkTheme : DefaultTheme;
+  const colVal = bgval === DarkTheme ? 'white' : 'black';
   return (
       <View
-          style={{ flex: 1}}
+          style={[tw("p-12") , { flex: 1}]}
       >
-      {user == null
+      {user === null
         ?
-        <View>
-          
+        <View style={tw("flex flex-col justify-center")}>
+          <TextInput 
+            label="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            mode='outlined'
+            theme={bgval}
+            textColor={colVal}
+            cursorColor={colVal}
+            outlineStyle={{
+              borderColor: 'gray'
+            }}
+          />
         </View>
         :
         <>
