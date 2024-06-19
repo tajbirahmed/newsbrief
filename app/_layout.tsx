@@ -1,26 +1,24 @@
 import { AuthProvider } from '@/contexts/AuthContext';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Slot } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { useColorScheme } from 'react-native';
+import React from 'react'
 
 import { TailwindProvider } from 'tailwind-rn';
 import utilities from '../tailwind.json';
+import { EmailProvider } from '@/contexts/EmailContext';
 
 export const unstable_settings = {
     initialRouteName: '/',
 };
 
 const RootLayout = () => {
-    const bgval = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
     return (
         <TailwindProvider utilities={utilities} colorScheme={"dark"} >
             {/* <ThemeProvider value={bgval}> */}
-
+            <EmailProvider>
                 <AuthProvider>
                     <Slot />
                 </AuthProvider>
-
+            </EmailProvider>
             {/* </ThemeProvider> */ }
         </TailwindProvider>
     )

@@ -1,54 +1,59 @@
-import { View, Text } from '@/components/Themed'
+
+import RegisterScreenTopComponent from '@/components/RegisterScreenTopComponent';
+import { Text, View } from '@/components/Themed'
 import { useAuth } from '@/contexts/AuthContext';
-import { DarkTheme } from '@react-navigation/native';
+import { PassProvider } from '@/contexts/PasswordContext';
+import CreateAccount from '@/screen/CreateAccount';
+import Login from '@/screen/Login';
+import { ChevronLeft } from 'lucide-react';
+
 import React, { useState } from 'react'
-import { StyleSheet, useColorScheme } from 'react-native';
-import { DefaultTheme, TextInput } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
 const Home = () => {
-  const {
-    user,
-    setUser
-  } = useAuth();
-  const tw = useTailwind();
-  const [email, setEmail] = useState('');
-  const bgval = useColorScheme() == 'dark' ? DarkTheme : DefaultTheme;
-  const colVal = bgval === DarkTheme ? 'white' : 'black';
-  return (
-      <View
-          style={[tw("p-12") , { flex: 1}]}
-      >
-      {user === null
-        ?
-        <View style={tw("flex flex-col justify-center")}>
-          <TextInput 
-            label="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            mode='outlined'
-            theme={bgval}
-            textColor={colVal}
-            cursorColor={colVal}
-            outlineStyle={{
-              borderColor: 'gray'
-            }}
-          />
-        </View>
-        :
-        <>
-          
-        </>
-      }
-    </View>
-  )
+	
+	const {
+		user,
+		setUser
+	} = useAuth();
+	const tw = useTailwind();
+	
+	const [screen, setScreen] = useState<boolean>(true)
+
+	return (
+		<View
+			style={[tw("p-4 flex flex-col justify-between"), { flex: 1 }]}
+		>
+				<RegisterScreenTopComponent
+				screen={screen}
+				setScreen={setScreen}
+				/>
+			<PassProvider>
+				{screen
+					?
+					(
+						<Login
+							screen={screen}
+							setScreen={setScreen}
+						/>
+					)
+					:
+					<CreateAccount
+						screen={screen}
+						setScreen={setScreen}
+					/>
+				}
+			</PassProvider>
+		</View>
+	)
 }
 
 const styles = StyleSheet.create({
-  login_screen: {
-    display: 'flex', 
-    flexDirection: 'row'
-  }
+	login_screen: {
+		display: 'flex',
+		flexDirection: 'row'
+	}
 })
 
 export default Home;
