@@ -32,7 +32,8 @@ const Login = ({
         pass,
         setPass
     } = usePass(); 
-    const [error, setError] = useState<boolean | null>(null)
+    const [error, setError] = useState<boolean | null>(null); 
+    
     const signIn = async () => {
         try {
             const response =
@@ -48,8 +49,11 @@ const Login = ({
             }
 
             if (response.user.emailVerified) {
+                alert('Success');
                 setUser(response.user);
             }
+            console.log("Success");
+            
 
         } catch (error: any) {
             console.error(error);
@@ -58,12 +62,8 @@ const Login = ({
     }
 
     const handleClick = () => {
-        if (error === false) {
-            // sign in 
-        } else {
-            setScreen(false)
-        }
-
+        if (error === false ) signIn(); 
+        else setScreen(!screen)
     }
     
     const checkIfEmailExists = async () => {

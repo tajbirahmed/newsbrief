@@ -1,15 +1,16 @@
-
 import RegisterScreenTopComponent from '@/components/RegisterScreenTopComponent';
-import { Text, View } from '@/components/Themed'
+import { View } from '@/components/Themed'
 import { useAuth } from '@/contexts/AuthContext';
 import { PassProvider } from '@/contexts/PasswordContext';
 import CreateAccount from '@/screen/CreateAccount';
 import Login from '@/screen/Login';
-import { ChevronLeft } from 'lucide-react';
+import { router } from 'expo-router';
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
+
+
 
 const Home = () => {
 	
@@ -20,6 +21,12 @@ const Home = () => {
 	const tw = useTailwind();
 	
 	const [screen, setScreen] = useState<boolean>(true)
+
+	useEffect(() => {
+		if (user) {
+			router.replace("/home/app");
+		}
+	}, [user]);
 
 	return (
 		<View
