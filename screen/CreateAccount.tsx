@@ -3,14 +3,20 @@ import { CustomTextInput } from '@/components/CustomTextInput';
 import { Text } from '@/components/Themed';
 import { useEmail } from '@/contexts/EmailContext';
 import { usePass } from '@/contexts/PasswordContext';
-import { DB } from '@/firebase/FirebaseConfig';
+import { DB, FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { RegisterPageType } from '@/types/RegisterPageType';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
 
+const actionCodeSettings = {
+    url: 'https://newsbiref.firebaseapp.com',
+    handleCodeInApp: true,
+    dynamicLinkDomain: 'newsbrief.page.link'
+};
 
 const CreateAccount = ({
     screen,
@@ -126,8 +132,35 @@ const CreateAccount = ({
         }
     }
 
+    
+
+    const signUp = async () => { 
+        try {
+            
+            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email!, pass);
+            const result = await sendEmailVerification(response.user, actionCodeSettings);
+            if (email) {
+                const docRef = await setDoc(doc(DB, 'User', email.toLowerCase()), {
+                    userName: userName,
+                    dateJoined: new Date(),
+                })
+            }
+        } catch (error) {
+            alert("CreateAccount" + error);
+        } finally {
+            
+        }
+    }
+
     const handleClick = () => {
-        setScreen(!screen)
+        // setScreen(!screen) 
+        if (errorEmail === false && emailExists === false &&
+            errorUserName === false && passStatus === true && 
+            email !== null
+        ) { 
+            signUp(); 
+            setScreen(!screen) 
+        }
     }
 
     useEffect(() => {
@@ -237,7 +270,6 @@ const CreateAccount = ({
               <CustomButton
                   buttonLabel="Create Account"
                   handleClick={handleClick}
-                  
               />
           </View>
       </View>
