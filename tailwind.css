@@ -1,9 +1,27 @@
+.absolute {
+  position: absolute
+}
+
 .m-4 {
   margin: 1rem
 }
 
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem
+}
+
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem
+}
+
 .mr-12 {
   margin-right: 3rem
+}
+
+.mt-1 {
+  margin-top: 0.25rem
 }
 
 .flex {
@@ -20,6 +38,14 @@
 
 .h-2\/3 {
   height: 66.666667%
+}
+
+.h-auto {
+  height: auto
+}
+
+.h-full {
+  height: 100%
 }
 
 .w-11\/12 {
@@ -66,6 +92,11 @@
   padding: 1rem
 }
 
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem
+}
+
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem
@@ -82,6 +113,11 @@
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem
 }
 
 .text-xl {

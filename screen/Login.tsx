@@ -49,7 +49,7 @@ const Login = ({
             }
 
             if (response.user.emailVerified) {
-                alert('Success');
+                // alert('Success');
                 setUser(response.user);
             }
             console.log("Success");

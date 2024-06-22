@@ -2,9 +2,11 @@ import RegisterScreenTopComponent from '@/components/RegisterScreenTopComponent'
 import { View } from '@/components/Themed'
 import { useAuth } from '@/contexts/AuthContext';
 import { PassProvider } from '@/contexts/PasswordContext';
+import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import CreateAccount from '@/screen/CreateAccount';
 import Login from '@/screen/Login';
 import { router } from 'expo-router';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native';
@@ -23,8 +25,14 @@ const Home = () => {
 	const [screen, setScreen] = useState<boolean>(true)
 
 	useEffect(() => {
+		onAuthStateChanged(FIREBASE_AUTH, (user) => {
+			setUser(user);
+		})
+	}, []);
+
+	useEffect(() => {
 		if (user) {
-			router.replace("/home/app");
+			router.replace("/home/app/");
 		}
 	}, [user]);
 
