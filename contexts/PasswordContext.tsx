@@ -2,7 +2,7 @@ import React, { FC, ReactNode, createContext, useContext, useState } from "react
 
 interface PasswordContextType {
     pass: string,
-    setPass: (email: string) => void
+    setPass: (pass: string) => void
 }
 
 const EmailContext = createContext<PasswordContextType | null>(null);

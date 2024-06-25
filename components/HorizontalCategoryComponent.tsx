@@ -37,7 +37,7 @@ const HorizontalCategoryComponent = () => {
                         justifyContent: 'center',
                         borderWidth: selected === value.categoryName ? 0.3 : 0.3, 
                         borderColor: 'gray',
-                        backgroundColor: selected === value.categoryName ? MD2Colors.blueGrey500 : 'transparent',
+                        backgroundColor: selected === value.categoryName ? MD2Colors.green800 : 'transparent',
                         padding: 2,
                         marginHorizontal: 3,
                         borderRadius: 5,

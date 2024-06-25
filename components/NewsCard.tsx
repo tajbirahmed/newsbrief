@@ -22,7 +22,7 @@ const NewsCard = ({
             right={(props) => <LucideBookMarked {...props} color='white' />}
         />
         <Card.Content>
-            <Text variant="bodyMedium" style={styles.snippet}>{article.description}</Text>
+            <Text numberOfLines={4} variant="bodyMedium" style={styles.snippet}>{article.description}</Text>
             <Text variant="bodySmall" style={styles.pubDate}>{new Date(article.pubDate).toDateString()}</Text>
         </Card.Content>
         <Card.Actions>

@@ -11,6 +11,7 @@ import Constants from 'expo-constants';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { CategoryProvider } from '@/contexts/CategoryContext';
 import { ScreenProvider } from '@/contexts/ScreenContext';
+import { PageProvider } from '@/contexts/PaginationContext';
 
 
 
@@ -38,13 +39,15 @@ const HomeRootLayout = () => {
 
 			}}
 		>
-			<ScreenProvider>
-				<CategoryProvider>
-					<Slot />
-				</CategoryProvider>
+			<PageProvider>
+				<ScreenProvider>
+					<CategoryProvider>
+						<Slot />
+					</CategoryProvider>
 
-				<FooterBar />
-			</ScreenProvider>
+					<FooterBar />
+				</ScreenProvider>
+			</PageProvider>
 		</Drawer>
 	)
 }

@@ -33,7 +33,7 @@ const Home = () => {
 
 	useEffect(() => {
 		if (user) {
-			router.replace("/home/app/explore/");
+			router.replace("/home/app/explore/1/");
 		}
 	}, [user]);
 	
