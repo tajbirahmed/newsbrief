@@ -60,12 +60,12 @@ const CustomButton = ({
                         mode='contained'
                         labelStyle={[tw("text-white"), { fontSize: 16 }]}
                         onPress={() => { handleButtonPress() }}
-                        theme={{
-                            colors: {
-                                primary: '#B53DDF'
-                            } 
+                        // theme={{
+                        //     colors: {
+                        //         primary: '#B53DDF'
+                        //     } 
                             
-                        }}
+                        // }}
                         style={
                             [tw("h-10 font-semibold rounded-lg") ]
                         }

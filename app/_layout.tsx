@@ -8,7 +8,7 @@ import { EmailProvider } from '@/contexts/EmailContext';
 
 
 export const unstable_settings = {
-    initialRouteName: '/',
+    initialRouteName: '/home/app/explore/',
 };
 
 const RootLayout = () => {

@@ -4,4 +4,5 @@ export interface ButtonPropsType {
     link?: String,
     handleClick?: () => void; 
     disabled?: boolean | null,
+    
 }

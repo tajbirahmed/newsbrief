@@ -5,7 +5,7 @@ import { PassProvider } from '@/contexts/PasswordContext';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import CreateAccount from '@/screen/CreateAccount';
 import Login from '@/screen/Login';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 
 import React, { useEffect, useState } from 'react'
@@ -27,14 +27,21 @@ const Home = () => {
 	useEffect(() => {
 		onAuthStateChanged(FIREBASE_AUTH, (user) => {
 			setUser(user);
+			// router.replace("/home/app/explore/");
 		})
 	}, []);
 
 	useEffect(() => {
 		if (user) {
-			router.replace("/home/app/");
+			router.replace("/home/app/explore/");
 		}
 	}, [user]);
+	
+	// if (user) {
+		
+	// 	alert("Welcome back!");
+	// 	return <Redirect href="/home/app/explore/" />
+	// }
 
 	return (
 		<View

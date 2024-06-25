@@ -6,32 +6,37 @@ import IconWithFeedback from './IconWithFeedback';
 import { AlignLeft } from 'lucide-react-native';
 import { Pressable } from 'react-native';
 
+
+
 export interface HeaderProps { 
     open?: boolean; 
     setOpen: (open : boolean) => void
+    meesage?: string;
 }
 
 const HeaderBar = ({ 
     open, 
-    setOpen
+    setOpen, 
+    meesage
 } : HeaderProps) => {
 
     const tw = useTailwind(); 
 
     return (
         <View style={[tw("px-4 mx-4 flex flex-row mt-1"), {
-            marginTop: Constants.statusBarHeight, 
+            marginTop: Constants.statusBarHeight + 2, 
             backgroundColor: '#282424', 
-            minHeight: '6%',
-            maxHeight: '6%', 
+            height: 55, 
             borderRadius: 20, 
             alignItems: 'center', 
             columnGap: 10, 
             zIndex: 12,
+            borderWidth: 1, 
+            borderColor: '#282424',
             
         }]}>
             <View style={[tw("h-full"), {
-                backgroundColor: '#282424',
+                backgroundColor: 'transparent',
             }]}>
                 <Pressable
                     onPress={() => {
@@ -45,7 +50,7 @@ const HeaderBar = ({
                 
         </View>
         <Text style={[tw("font-semibold text-lg"), {color: 'gray'}]}>
-                Search in News
+                {meesage!}
         </Text>
     </View>
           

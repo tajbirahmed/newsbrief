@@ -12,12 +12,6 @@
 			"marginLeft": 16
 		}
 	},
-	"mx-3": {
-		"style": {
-			"marginLeft": 12,
-			"marginRight": 12
-		}
-	},
 	"mx-4": {
 		"style": {
 			"marginLeft": 16,
@@ -126,12 +120,6 @@
 			"paddingRight": 16,
 			"paddingBottom": 16,
 			"paddingLeft": 16
-		}
-	},
-	"px-3": {
-		"style": {
-			"paddingLeft": 12,
-			"paddingRight": 12
 		}
 	},
 	"px-4": {

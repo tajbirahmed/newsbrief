@@ -6,11 +6,6 @@
   margin: 1rem
 }
 
-.mx-3 {
-  margin-left: 0.75rem;
-  margin-right: 0.75rem
-}
-
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem
@@ -90,11 +85,6 @@
 
 .p-4 {
   padding: 1rem
-}
-
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem
 }
 
 .px-4 {

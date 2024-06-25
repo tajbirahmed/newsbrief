@@ -2,22 +2,25 @@ import React from 'react'
 import { Text, View } from './Themed'
 import { useTailwind } from 'tailwind-rn'
 import { Pressable } from 'react-native';
+import { useScreen } from '@/contexts/ScreenContext';
 
 
 interface FooterProps {
   title: string,
   icon: React.ReactNode,
-  selected: string, 
-  setSelected: (selected : string) => void
 }
 
 const FooterItem = ({
   title,
   icon, 
-  selected, 
-  setSelected
 }: FooterProps) => {
   const tw = useTailwind();
+  
+  const {
+    screen,
+    setScreen
+  } = useScreen(); 
+
   return (
     <Pressable style={{
       flex: 1,
@@ -28,7 +31,7 @@ const FooterItem = ({
       // borderColor: 'white'
     }}
       onPress={() => {
-        setSelected(title)
+        setScreen(title)
       }}
     >
       <View style={[tw("flex flex-col"), {
@@ -43,8 +46,8 @@ const FooterItem = ({
             fontSize: 12,
             alignSelf: 'center',
             backgroundColor: 'none', 
-            color: title === selected ? 'white' : 'gray',
-            fontWeight: title === selected ? 'bold' : '400',
+            color: title === screen ? 'white' : 'gray',
+            fontWeight: title === screen ? '900' : '400',
           }]}
         >{title}
         </Text>

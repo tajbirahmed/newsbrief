@@ -42,10 +42,11 @@ const CustomTextInput = ({
                 }}
                 right={hidden
                     ? (
-                        
-                        <TextInput.Icon icon={secure ? "eye" : "eye-off"} onPress={() => { 
-                            setSecure(!secure)
-                        }} />
+                        <></>
+                        // 
+                        // <TextInput.Icon icon={secure ? "eye" : "eye-off"} onPress={() => { 
+                        //     setSecure(!secure)
+                        // }} />
                         
                     )
                     :
