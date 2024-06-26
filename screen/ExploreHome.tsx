@@ -1,12 +1,8 @@
-import React, { useDebugValue, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Text, View } from '@/components/Themed'
 import { ActivityIndicator, MD2Colors } from 'react-native-paper'
-import { Dimensions, Pressable, ScrollView } from 'react-native'
+import { Dimensions, Pressable } from 'react-native'
 import { useTailwind } from 'tailwind-rn'
-import HeaderBar from '@/components/Header'
-import { useDrawer } from '@/contexts/DrawerContext'
-import { useScreen } from '@/contexts/ScreenContext'
-import HorizontalCategoryComponent from '@/components/HorizontalCategoryComponent'
 import { fetchData } from '@/utils/fetchArticles'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,21 +12,14 @@ import { useCategory } from '@/contexts/CategoryContext'
 import { router, useLocalSearchParams } from 'expo-router'
 import { DarkTheme } from '@react-navigation/native'
 import NewsCard from '@/components/NewsCard'
-import {  ChevronsLeft, ChevronsRight } from 'lucide-react-native'
+import { ChevronsLeft, ChevronsRight } from 'lucide-react-native'
 import { usePage } from '@/contexts/PaginationContext'
+import { useNxtPage } from '@/contexts/NextPageContect'
 
 const ExploreHome = () => {
 	const tw = useTailwind();
 
-	const {
-		open,
-		setOpen
-	} = useDrawer();
-
-	const {
-		screen,
-		setScreen
-	} = useScreen();
+	
 
 	const {
 		selected,
@@ -44,9 +33,15 @@ const ExploreHome = () => {
 	const {
 		page,
 		setPage
-	} = usePage(); 
+	} = usePage();
+
+	const {
+		nxtPage,
+		setNxtPage
+	} = useNxtPage();
+
 	const [articles, setArticles] = useState<Result[]>([]);
-	const [nxtPage, setNxtPage] = useState<string | null>(null);
+
 	const [pageLoading, setPageLoading] = useState<boolean>();
 	const [navArray, setNavArray] = useState<number[]>(generateNumberArray(page));
 	const [trigger, setTrigger] = useState<boolean>(false)
@@ -69,6 +64,7 @@ const ExploreHome = () => {
 		}
 	};
 
+
 	const getDataFromCache = async (key: string): Promise<boolean> => {
 		try {
 			const jsonData = await AsyncStorage.getItem(key);
@@ -76,10 +72,8 @@ const ExploreHome = () => {
 				const res = await JSON.parse(jsonData);
 				const {
 					results,
-					nextPage
 				} = res;
 				setArticles(results);
-				setNxtPage(nextPage);
 				setPageLoading(false);
 				return true;
 			}
@@ -89,6 +83,20 @@ const ExploreHome = () => {
 		setPageLoading(false);
 		return false;
 	};
+
+	const getNextPage = async (key: string) => {
+		try {
+			const jsonData = await AsyncStorage.getItem(key);
+			if (jsonData != null) {
+				const res = await JSON.parse(jsonData);
+				setNxtPage(res);
+				setTrigger(true);
+
+			}
+		} catch (error) {
+			console.error('Error retrieving next page data from cache:', error);
+		}
+	}
 
 	const deleteDataFromCache = async (key: string): Promise<void> => {
 		try {
@@ -110,11 +118,12 @@ const ExploreHome = () => {
 				category: selected.toLowerCase()
 			}
 		}
+		// await getNextPage(`${page-1}-${selected}`)
 		const currentNxtPage = nxtPageRef.current;
 		if (currentNxtPage !== null) {
 			additionalParams = {
 				...additionalParams,
-				nextPage: currentNxtPage
+				page: currentNxtPage
 			}
 		}
 		const axiosInstance = axios.create({
@@ -124,15 +133,14 @@ const ExploreHome = () => {
 			params: {
 				apiKey: process.env.EXPO_PUBLIC_NEWS_DATA_API_KEY,
 				Language: 'en'
-			}
+			},
 		});
 
 
 		let url = `https://newsdata.io/api/1/news?apikey=${process.env.EXPO_PUBLIC_NEWS_DATA_API_KEY}&language=en`
 		if (selected !== null) url += `&category=${selected.toLowerCase()}`;
-		if (currentNxtPage !== null) url += `&nextpage=${currentNxtPage}`;
-		console.log(url);
-		
+		if (currentNxtPage !== null) url += `&page=${currentNxtPage}`;
+
 		const {
 			data
 		} = await fetchData({
@@ -143,10 +151,12 @@ const ExploreHome = () => {
 			results,
 			nextPage
 		} = data;
-		setNxtPage(nextPage);
+		// setNxtPage(nextPage);
 		setArticles(results);
 		setPageLoading(false);
 		await saveDataToCache(generateCacheKey({ currPage: page }), data);
+		await saveDataToCache(`${page}-${selected}`, nextPage)
+		console.log("key" + `${page}-${selected}: ` + nextPage);
 
 
 	}
@@ -162,201 +172,178 @@ const ExploreHome = () => {
 			return [x - 4, x - 3, x - 2, x - 1, x];
 		}
 		return [x - 2, x - 1, x, x + 1, x + 2];
-		
+
 	}
 
-	 
+
 	const handePageSelect = (val: number) => {
-		setPage(val); 
-		// handle val < 1 and val > 10
-		router.replace(`/home/app/explore/${val}`);
+		if (val >= 1 && val <= 10) {
+			setPage(val);
+			// handle val < 1 and val > 10
+			router.replace(`/home/app/explore/${val}`);
+		} else {
 
+		}
 	}
-	
+
 	useEffect(() => {
 		id && setPage(parseInt(id));
 		id && setNavArray(generateNumberArray(parseInt(id)));
 	}, [])
 
 	useEffect(() => {
-		setScreen('Explore');
-		handleFetchArticles();
-		console.log(page);
-		console.log(selected);
-		
+
+		const getPage = async () => {
+			await getNextPage(`${page - 1}-${selected}`)
+		}
+		if (page > 1)
+			getPage();
+		else
+			handleFetchArticles();
+
 	}, []);
 
-	
 
-	useEffect(() => { 
+
+	useEffect(() => {
 		nxtPageRef.current = nxtPage;
 	}, [nxtPage])
 
-	useEffect(() => { 
+	useEffect(() => {
 
-		setNxtPage(null); 
+		setNxtPage(null);
 		setTrigger(true);
 
 	}, [selected])
-	
+
 	useEffect(() => {
 		if (trigger) {
 			handleFetchArticles()
 				.then(() => {
-					setTrigger(false); 
+					setTrigger(false);
 				});
 		}
 	}, [trigger]);
 
 	return (
-		<View style={[tw(""), {
-			flex: 1,
-			backgroundColor: MD2Colors.black,
-			height: Dimensions.get('window').height + 30,
-			position: 'absolute',
-			zIndex: 10,
-			minWidth: '100%',
+		pageLoading
+			?
+			(
+				<View style={[tw("flex flex-col justify-center self-center"), {
+					backgroundColor: 'transparent',
+					height: Dimensions.get('window').height - 150,
+					width: '100%',
+					gap: 8,
+				}]}>
+					<ActivityIndicator
+						theme={DarkTheme}
+						color={MD2Colors.blue800}
+						animating={true}
+						style={tw("self-center")} />
+					<Text style={[tw("self-center"), { color: MD2Colors.blue800 }]}>
+						Fetching data....
+					</Text>
+				</View>
+			)
+			:
+			(
+				<>
+					{
+						articles.map((val, ind) => (
+							<View key={ind} style={{}}>
+								<NewsCard
+									article={val}
+								/>
+							</View>
 
+						))
+					}
+					<View style={[tw(""), {
+						height: 105,
+						width: Dimensions.get('window').width,
+						alignSelf: 'center',
+						borderRadius: 40,
+						marginBottom: 10
 
-		}]}
-		>
-			<ScrollView style={[tw("flex flex-col"), {
-				backgroundColor: 'transparent',
-				height: 'auto',
-				paddingBottom: 40,
-			}]}>
-
-				<HeaderBar
-					open={open}
-					setOpen={setOpen}
-					meesage={"Explore in News"}
-				/>
-				<HorizontalCategoryComponent
-
-				/>
-
-
-				{pageLoading
-					?
-					(
-						<View style={[tw("flex flex-col justify-center self-center"), {
-							backgroundColor: 'transparent',
-							height: Dimensions.get('window').height - 150,
+					}]}>
+						<View style={[tw("flex flex-row items-center justify-center"), {
 							width: '100%',
-							gap: 8,
+							height: 60,
+							// backgroundColor: MD2Colors.blue900,
 						}]}>
-							<ActivityIndicator
-								theme={DarkTheme}
-								color={MD2Colors.blue800}
-								animating={true}
-								style={tw("self-center")} />
-							<Text style={[tw("self-center"), { color: MD2Colors.blue800 }]}>
-								Fetching data....
-							</Text>
-						</View>
-					)
-					: (
-						<>
-							{
-								articles.map((val, ind) => (
-									<View key={ind} style={{}}>
-										<NewsCard
-											article={val}
-										/>
-									</View>
+							<Pressable
+								onPress={() => handePageSelect(page - 1)}
+								style={{ paddingHorizontal: 8 }} >
+								<ChevronsLeft color="white" size={20} />
+							</Pressable>
+							{navArray.map((val, ind) => (
+								<Pressable
+									onPress={() => handePageSelect(val)}
+									key={ind}
+									style={[tw("self-center"), {
+										paddingHorizontal: 6,
+										backgroundColor: val === page ? MD2Colors.green800 : 'transparent',
+										borderRadius: 12,
+										height: 24,
+										width: 35,
 
-								))
-							}
-							<View style={[tw(""), {
-								height: 105,
-								width: Dimensions.get('window').width, 
-								alignSelf: 'center',
-								borderRadius: 40,
-								marginBottom: 10
-
-							}]}>
-								<View style={[tw("flex flex-row items-center justify-center"), {
-									width: '100%', 
-									height: 60, 
-									// backgroundColor: MD2Colors.blue900,
-								}]}>
+									}]}>
+									<Text
+										style={[tw("text-white"), {
+											fontSize: 20,
+											fontWeight: val === page ? "900" : "normal",
+											alignSelf: 'center',
+										}]}
+									>
+										{val}
+									</Text>
+								</Pressable>
+							))}
+							{!navArray.includes(10) ? (
+								<>
+									<Text
+										style={[tw("text-white"), {
+											fontSize: 10,
+											alignSelf: 'center',
+										}]}>
+										{"..."}
+									</Text>
 									<Pressable
-										onPress={() => handePageSelect(page - 1)}
-										style={{ paddingHorizontal: 8 }} >
-										<ChevronsLeft color="white" size={20}/>
-									</Pressable>
-									{navArray.map((val, ind) => (
-										<Pressable
-											onPress={() => handePageSelect(val)}
-											key={ ind }
-											style={[tw("self-center"),{
-												paddingHorizontal: 6,
-												backgroundColor: val === page ? MD2Colors.green800 : 'transparent',
-												borderRadius: 12, 
-												height: 24,
-												width: 35,
-												
-											}]}>
-											<Text
-												style={[tw("text-white"), {
-													fontSize: 20, 
-													fontWeight: val === page ? "900" : "normal", 
-													alignSelf: 'center', 
-												}]}
-											>
-												{val}
-											</Text>
-										</Pressable>
-									))}
-									{!navArray.includes(10) ?  (
-										<>
-											<Text
-												style={[tw("text-white"), {
-												fontSize: 10,
-												alignSelf: 'center',
-											}]}>
-												{ "..."}
-										</Text>
-											<Pressable
-												onPress={() => { handePageSelect(10)}}
-												style={[tw("self-center"), {
+										onPress={() => { handePageSelect(10) }}
+										style={[tw("self-center"), {
 											paddingHorizontal: 6,
 											backgroundColor: page === 10 ? MD2Colors.green800 : 'transparent',
 											borderRadius: 12,
 											height: 24,
-													width: 35,
+											width: 35,
 											overflow: 'visible',
 
 										}]}>
 										<Text
-												style={[tw("text-white"), {
-													fontSize: 20,
-													fontWeight: page === 10 ? "900" : "normal",
-													alignSelf: 'center',
-													overflow: 'visible',
+											style={[tw("text-white"), {
+												fontSize: 20,
+												fontWeight: page === 10 ? "900" : "normal",
+												alignSelf: 'center',
+												overflow: 'visible',
 
-												}]}
-											>
+											}]}
+										>
 
-										{"10"}
-											</Text>
-										</Pressable></>
-									) : <></>}
-									<Pressable
-										onPress={() => handePageSelect(page + 1)}
-										style={{ paddingHorizontal: 8 }} >
-										<ChevronsRight color="white" size={22} />
-									</Pressable>
-								</View>
-							</View>
-						</>
-					)
-				}
+											{"10"}
+										</Text>
+									</Pressable></>
+							) : <></>}
+							<Pressable
+								onPress={() => handePageSelect(page + 1)}
+								style={{ paddingHorizontal: 8 }} >
+								<ChevronsRight color="white" size={22} />
+							</Pressable>
+						</View>
+					</View>
+				</>
+			)
 
-				
 
-			</ScrollView>
-		</View>
 	)
 }
 

@@ -12,6 +12,7 @@ import { useDrawer } from '@/contexts/DrawerContext';
 import { CategoryProvider } from '@/contexts/CategoryContext';
 import { ScreenProvider } from '@/contexts/ScreenContext';
 import { PageProvider } from '@/contexts/PaginationContext';
+import { NextPageProvider } from '@/contexts/NextPageContect';
 
 
 
@@ -42,9 +43,10 @@ const HomeRootLayout = () => {
 			<PageProvider>
 				<ScreenProvider>
 					<CategoryProvider>
-						<Slot />
+						<NextPageProvider>
+							<Slot />
+						</NextPageProvider>
 					</CategoryProvider>
-
 					<FooterBar />
 				</ScreenProvider>
 			</PageProvider>

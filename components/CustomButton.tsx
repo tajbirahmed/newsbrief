@@ -21,14 +21,15 @@ const CustomButton = ({
     buttonLabel,
     link,
     handleClick,
-    disabled
+    disabled, 
+    buttonLoading, 
 }: ButtonPropsType) => {
 
-    const [loading, setLoading] = useState<boolean>(false)
+    // const [loading, setLoading] = useState<boolean>(false)
     const handleButtonPress = () => {
-        setLoading(true);
+        // setLoading(true);
         handleClick && handleClick();
-        setLoading(false);
+        // setLoading(false);
     }
     const tw = useTailwind();
 
@@ -70,7 +71,7 @@ const CustomButton = ({
                             [tw("h-10 font-semibold rounded-lg") ]
                         }
                         
-                        loading={loading}
+                        loading={buttonLoading}
                         disabled={disabled!}
                     >
                         {buttonLabel}

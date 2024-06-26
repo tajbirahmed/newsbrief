@@ -5,9 +5,8 @@ import { useEmail } from '@/contexts/EmailContext';
 import { usePass } from '@/contexts/PasswordContext';
 import { DB, FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { RegisterPageType } from '@/types/RegisterPageType';
-import { router } from 'expo-router';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import {  doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
