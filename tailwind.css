@@ -19,10 +19,6 @@
   margin-top: 0.25rem
 }
 
-.mt-8 {
-  margin-top: 2rem
-}
-
 .flex {
   display: flex
 }
@@ -47,24 +43,12 @@
   height: 100%
 }
 
-.h-16 {
-  height: 4rem
-}
-
 .w-11\/12 {
   width: 91.666667%
 }
 
 .w-48 {
   width: 12rem
-}
-
-.w-full {
-  width: 100%
-}
-
-.w-16 {
-  width: 4rem
 }
 
 .flex-row {
@@ -79,10 +63,6 @@
   align-items: center
 }
 
-.justify-start {
-  justify-content: flex-start
-}
-
 .justify-center {
   justify-content: center
 }
@@ -95,10 +75,6 @@
   justify-content: space-around
 }
 
-.self-start {
-  align-self: flex-start
-}
-
 .self-center {
   align-self: center
 }
@@ -109,11 +85,6 @@
 
 .rounded-lg {
   border-radius: 0.5rem
-}
-
-.bg-yellow-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 249 195 / var(--tw-bg-opacity))
 }
 
 .p-4 {
