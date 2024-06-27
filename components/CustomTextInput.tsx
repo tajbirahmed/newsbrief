@@ -1,10 +1,7 @@
 import { TextInputType } from '@/types/TextInputType';
 import { DarkTheme } from '@react-navigation/native';
-import { Eye } from 'lucide-react-native';
 import React, { useState } from 'react'
-import { Button, Pressable } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MD3Colors, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideInRight } from 'react-native-reanimated';
 import { useTailwind } from 'tailwind-rn';
 
@@ -18,7 +15,8 @@ const CustomTextInput = ({
     error, 
     onChange, 
     onEndEditing, 
-    readonly
+    readonly, 
+    numberOfLines
 }: TextInputType) => {
     const tw = useTailwind();
     const [secure, setSecure] = useState(hidden)
@@ -37,6 +35,7 @@ const CustomTextInput = ({
                 }}
                 contentStyle={{
                     fontFamily: 'monospace', 
+                    overflow: 'scroll', 
                 }}
                 secureTextEntry={secure}
                 error={error !== null ? error : false}
@@ -60,6 +59,8 @@ const CustomTextInput = ({
                 }
                 onEndEditing={onEndEditing}
                 readOnly={readonly}
+                numberOfLines={numberOfLines} 
+                multiline={numberOfLines ? true : false}
             />
         </Animated.View>
   )

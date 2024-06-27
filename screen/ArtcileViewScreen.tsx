@@ -6,13 +6,20 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router'
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Pressable, ScrollView } from 'react-native';
+import { Dimensions, Linking, Pressable, ScrollView } from 'react-native';
 import { ActivityIndicator, MD2Colors, MD3Colors, Paragraph } from 'react-native-paper';
 import { useTailwind } from 'tailwind-rn';
 import Constants from 'expo-constants';
-import { ChevronLeft } from 'lucide-react-native';
-import { exampleNews } from '@/constants/EXAMPLENEWS';
+import { ChevronLeft, Martini } from 'lucide-react-native';
 import { DarkTheme } from '@react-navigation/native';
+import YoutubePlayer from "react-native-youtube-iframe";
+import RatingComp from '@/components/RatingComp';
+import { getDataFromCache, saveDataToCache } from '@/utils/customCacheControl';
+import * as WebBrowser from 'expo-web-browser';
+import CustomButton from '@/components/CustomButton';
+import CommentComponent from '@/components/CommentComponent';
+
+
 
 
 const ArtcileViewScreen = () => {
@@ -27,44 +34,65 @@ const ArtcileViewScreen = () => {
 	const WIDTH = Dimensions.get('window').width;
 
 	const [articleLoading, setArticleLoading] = useState<boolean>(false)
-	const [article, setArticle] = useState<Result>(exampleNews);
+	const [article, setArticle] = useState<Result | undefined>(undefined);
 
 	const getArtcile = async () => {
+		setArticleLoading(true);
+
+		const cachedData = await getDataFromCache(`article:${article_id}`); 
+
+		if (cachedData) {
+			setArticle(cachedData); 
+			setArticleLoading(false); 
+			return; 
+		}
+
 		const articlesRef = collection(DB, 'Article');
+
 		const q = query(articlesRef,
 			where('article_id', '==', article_id)
 		);
+
 		const querySnapshot = await getDocs(q);
 
 		if (!querySnapshot.empty) {
 			const articleData = querySnapshot.docs[0].data() as Result;
 			setArticle(articleData);
-			// console.log("Article data:", articleData);
+
+			await saveDataToCache(`article:${article_id}`, articleData);
+			
 		} else {
 			console.log("No such article!");
-			// setArticle(undefined);
 		}
+
+		setArticleLoading(false);
 	}
 	function formatDate(dateString: string): string {
-		// Months array to convert month number to month name
 		const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
 			"Sep", "Oct", "Nov", "Dec"];
 
-		// Split the input string into date and time parts
+
 		const [datePart, timePart] = dateString.split(' ');
 		const [year, month, day] = datePart.split('-').map(Number);
 		const [hour, minute] = timePart.split(':').map(Number);
 
-		// Format the date
+		
 		const formattedDate = `${months[month - 1]} ${day}, ${year}, ${hour}:${minute}`;
 
 		return formattedDate;
 	}
+
 	const toUpper = (str: string): string => {
 		return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 	}
+
+	const handleClickViewOriginal = async () => { 
+		article?.link ? (await WebBrowser.openBrowserAsync(article.link)) : null;
+	}
+
+
 	useEffect(() => {
-		// getArtcile();
+		getArtcile();
 	}, [])
 
 	return (
@@ -99,6 +127,8 @@ const ArtcileViewScreen = () => {
 					</View>
 				)
 				:
+				article !== undefined 
+					?
 				(
 					<ScrollView style={[tw("flex flex-col"), {
 						backgroundColor: 'transparent',
@@ -121,6 +151,19 @@ const ArtcileViewScreen = () => {
 						}]}>
 							<ChevronLeft size={32} color={MD2Colors.white} />
 						</View>
+							<View style={[tw("absolute "), {
+								top: HEIGHT * 0.24,
+								left: WIDTH - 100,
+								backgroundColor: 'transparent',
+								width: 100, 
+								height: 100, 
+								overflow: 'hidden'
+							}]}>
+								<CustomButton
+									buttonLabel={"View Original"}
+									handleClick={handleClickViewOriginal}
+								/>
+							</View>	
 
 						<View style={[tw("flex flex-col"), {
 							padding: 15,
@@ -133,21 +176,19 @@ const ArtcileViewScreen = () => {
 								}]}>
 									{article.title}
 								</Text>
-							</View>
-							<Pressable style={{
+								</View>
+								
+							<View style={{
 								marginTop: 10,
 							}}
-								onPress={() => {
-
-								}}
 							>
 								<Text style={[tw(""), {
 									fontWeight: 'semibold',
 									fontSize: 14,
 								}]}>
-									{article.creator + " "}{"/ Updeated: " + formatDate(article.pubDate)}
+									{article.creator + " / "}{"Updeated: " + formatDate(article.pubDate)}
 								</Text>
-							</Pressable>
+							</View>
 
 							<View style={[tw("flex flex-row "), {
 								overflow: 'visible',
@@ -182,27 +223,76 @@ const ArtcileViewScreen = () => {
 										</Text>
 									</View>
 								))}
-							</View>
-							<View>
-								<Paragraph style={{
+								</View>
+								<Pressable style={[tw("self-end flex flex-row items-center"), {
+									
+								}]}>
+									{/* Generate Summary */}
+								</Pressable>
+							<View style={{
+								marginVertical: 10, 
+							}}>
+								<Paragraph style={[tw("font-semibold"), {
 									color: 'white', 
-									marginTop: 15, 
-								}}>
+									fontSize: 15, 
+								}]}>
 									{"    "+article?.description}
 								</Paragraph>
 							</View>
 							{article.video_url
 								?
-								<></>
+								<View style={{ marginVertical: 10, }}>
+									<YoutubePlayer
+										height={300}
+										play={true}
+										videoId={"YQPeKqWWm7M"}
+									/>
+								</View>
 								:
 								<></>
 							}
 
+							<View style={{marginVertical: 10}}>
+								<Paragraph
+									selectable={true}
+									selectionColor={MD2Colors.blue800}
+									style={{
+									color: 'white', 
+									fontSize: 15, 
+									fontWeight: '500', 
+									lineHeight: 30, 
+								}}>
+									{article?.content}
+								</Paragraph>
+							</View>
+							<View style={{ marginVertical: 10 }}>
+								<Paragraph
+									selectable={true} 
+									selectionColor={MD2Colors.blue800}
+									style={{
+									color: 'white',
+									fontSize: 15,
+									fontWeight: '500',
+									lineHeight: 30,
+								}}>
+									{article?.full_description}
+								</Paragraph>
+							</View>
+								{/* <RatingComp /> */}
+
+								<CommentComponent />
+						</View>
+							<View style={{height: 500,}}>
+								
 						</View>
 
 					</ScrollView>
-				)
-
+					)
+					:
+					(
+						<Text>Articles is not fetched, retry</Text>
+					)
+				
 			}
 		</View>
 	)

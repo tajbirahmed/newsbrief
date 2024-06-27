@@ -5,6 +5,8 @@ import React from 'react'
 import { TailwindProvider } from 'tailwind-rn';
 import utilities from '../tailwind.json';
 import { EmailProvider } from '@/contexts/EmailContext';
+import { ProfileImageUrlProvider } from '@/contexts/ProfileImageUrlContext';
+import { UserNameProvider } from '@/contexts/UserNameContext';
 
 
 export const unstable_settings = {
@@ -17,9 +19,13 @@ const RootLayout = () => {
             {/* <ThemeProvider value={bgval}> */}
             <EmailProvider>
                 <AuthProvider>
-                    {/* <View style={{flex: 1}}> */}
-                        <Slot />
-                    {/* </View> */}
+                    
+                    <ProfileImageUrlProvider>
+                        <UserNameProvider>
+                            <Slot />
+                        </UserNameProvider>
+                    </ProfileImageUrlProvider>
+                    
                 </AuthProvider>
             </EmailProvider>
             {/* </ThemeProvider> */ }

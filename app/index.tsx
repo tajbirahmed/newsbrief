@@ -33,7 +33,7 @@ const Home = () => {
 
 	useEffect(() => {
 		if (user) {
-			router.replace("/home/article/view/1");
+			router.replace("/home/article/view/2");
 		}
 	}, [user]);
 	

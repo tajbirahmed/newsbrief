@@ -1,4 +1,3 @@
-import { ProfileImageUrlProvider } from '@/contexts/ProfileImageUrlContext';
 import { useScreen } from '@/contexts/ScreenContext';
 import { Slot } from 'expo-router'
 import React, { useEffect } from 'react'
@@ -17,9 +16,9 @@ const Account = () => {
 
 	}, [])
 	return (
-		<ProfileImageUrlProvider>
+		
 			<Slot />
-		</ProfileImageUrlProvider>
+		
 	)
 }
 

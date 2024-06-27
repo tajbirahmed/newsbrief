@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-const saveDataToCache = async (key: string, data: any) => {
+export const saveDataToCache = async (key: string, data: any) => {
     try {
         const jsonData = JSON.stringify(data);
         await AsyncStorage.setItem(key, jsonData);
@@ -11,7 +11,7 @@ const saveDataToCache = async (key: string, data: any) => {
     }
 };
 
-const getDataFromCache = async (key: string): Promise<boolean> => {
+export const getDataFromCache = async (key: string) => {
     try {
         const jsonData = await AsyncStorage.getItem(key);
         if (jsonData != null) {
@@ -21,5 +21,5 @@ const getDataFromCache = async (key: string): Promise<boolean> => {
     } catch (error) {
         console.error('Error retrieving data from cache:', error);
     }
-    return false;
+    return null;
 };

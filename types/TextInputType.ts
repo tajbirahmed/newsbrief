@@ -6,5 +6,6 @@ export interface TextInputType {
     error?: boolean | null
     onChange?: () => void, 
     onEndEditing?: () => void
-    readonly?: boolean
+    readonly?: boolean, 
+    numberOfLines?: number
 }
