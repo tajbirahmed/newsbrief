@@ -156,8 +156,10 @@ const ExploreHome = () => {
 		setPageLoading(false);
 		await saveDataToCache(generateCacheKey({ currPage: page }), data);
 		
-		// add timing to cache
-		await saveDataToCache(`${page}-${selected}`, nextPage)
+		const date = new Date();
+		const formattedDate = format(date, 'MM-dd-yyyy');
+		const hour = format(date, 'HH');
+		await saveDataToCache(`${formattedDate}-${hour}-${page}-${selected}`, nextPage)
 		
 
 
@@ -182,6 +184,7 @@ const ExploreHome = () => {
 		if (val >= 1 && val <= 10) {
 			setPage(val);
 			// handle val < 1 and val > 10
+			
 			router.replace(`/home/app/explore/${val}`);
 		} else {
 
@@ -196,7 +199,10 @@ const ExploreHome = () => {
 	useEffect(() => {
 
 		const getPage = async () => {
-			await getNextPage(`${page - 1}-${selected}`)
+			const date = new Date();
+			const formattedDate = format(date, 'MM-dd-yyyy');
+			const hour = format(date, 'HH');
+			await getNextPage(`${formattedDate}-${hour}-${page - 1}-${selected}`)
 		}
 		if (page > 1)
 			getPage();

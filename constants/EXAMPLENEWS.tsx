@@ -2,6 +2,7 @@ import { Result } from "@/types/ResultType";
 
 export const exampleNews: Result =
 {
+    article_id: "1", 
     title: "India taking up issues of pending salaries in Gulf countries",
     link: "https://www.sentinelassam.com/national-news/india-taking-up-issues-of-pending-salaries-in-gulf-countries-576449",
     keywords: [
@@ -22,7 +23,8 @@ export const exampleNews: Result =
         "india"
     ],
     category: [
-        "top"
+        "top", 
+        "politics",
     ],
     language: "english"
 }

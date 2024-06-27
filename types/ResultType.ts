@@ -1,4 +1,5 @@
 export interface Result {
+    article_id:string, 
     title: string;
     link: string;
     keywords: string[];
