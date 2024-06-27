@@ -155,8 +155,10 @@ const ExploreHome = () => {
 		setArticles(results);
 		setPageLoading(false);
 		await saveDataToCache(generateCacheKey({ currPage: page }), data);
+		
+		// add timing to cache
 		await saveDataToCache(`${page}-${selected}`, nextPage)
-		console.log("key" + `${page}-${selected}: ` + nextPage);
+		
 
 
 	}

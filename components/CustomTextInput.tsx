@@ -1,9 +1,10 @@
 import { TextInputType } from '@/types/TextInputType';
 import { DarkTheme } from '@react-navigation/native';
+import { Eye } from 'lucide-react-native';
 import React, { useState } from 'react'
 import { Button, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TextInput } from 'react-native-paper';
+import { MD3Colors, TextInput } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideInRight } from 'react-native-reanimated';
 import { useTailwind } from 'tailwind-rn';
 
@@ -16,6 +17,8 @@ const CustomTextInput = ({
     hidden, 
     error, 
     onChange, 
+    onEndEditing, 
+    readonly
 }: TextInputType) => {
     const tw = useTailwind();
     const [secure, setSecure] = useState(hidden)
@@ -32,27 +35,31 @@ const CustomTextInput = ({
                     borderRadius: 8,
                     // borderColor: error === false ? 'green' : 'gray'
                 }}
-                contentStyle={{ fontFamily: 'monospace' }}
+                contentStyle={{
+                    fontFamily: 'monospace', 
+                }}
                 secureTextEntry={secure}
                 error={error !== null ? error : false}
                 // outlineColor={error === true ? 'green' : 'gray'}
+                outlineColor= {readonly ? 'green' : 'gray'}
                 onChange={() => { 
                     onChange && onChange()
                     
                 }}
                 right={hidden
                     ? (
-                        <></>
-                        // 
-                        // <TextInput.Icon icon={secure ? "eye" : "eye-off"} onPress={() => { 
-                        //     setSecure(!secure)
-                        // }} />
+                        
+                        
+                        <TextInput.Icon icon={secure ? "eye" : "eye-off"} onPress={() => { 
+                            setSecure(!secure)
+                        }} />
                         
                     )
                     :
                     <></>
                 }
-                
+                onEndEditing={onEndEditing}
+                readOnly={readonly}
             />
         </Animated.View>
   )

@@ -4,5 +4,7 @@ export interface TextInputType {
     setContent: (content: string) => void; 
     hidden?: boolean
     error?: boolean | null
-    onChange?: () => void
+    onChange?: () => void, 
+    onEndEditing?: () => void
+    readonly?: boolean
 }
