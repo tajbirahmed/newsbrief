@@ -23,6 +23,10 @@
   margin-top: 2.5rem
 }
 
+.mt-2 {
+  margin-top: 0.5rem
+}
+
 .flex {
   display: flex
 }
@@ -103,6 +107,11 @@
   padding: 1rem
 }
 
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem
+}
+
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem
@@ -111,6 +120,10 @@
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem
+}
+
+.pl-1 {
+  padding-left: 0.25rem
 }
 
 .pt-10 {

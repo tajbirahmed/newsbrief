@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
+// Create Accounf Button Laoding, 
 
 const actionCodeSettings = {
     url: 'https://newsbiref.firebaseapp.com',

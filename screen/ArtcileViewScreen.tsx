@@ -278,11 +278,21 @@ const ArtcileViewScreen = () => {
 									{article?.full_description}
 								</Paragraph>
 							</View>
-								{/* <RatingComp /> */}
+								{!articleLoading
+									?
+										(
+											<>
+												<RatingComp />
 
-								<CommentComponent />
+												<CommentComponent />
+											</>
+										)
+									:
+									null
+								}
+								
 						</View>
-							<View style={{height: 500,}}>
+							<View style={{height: 50,}}>
 								
 						</View>
 

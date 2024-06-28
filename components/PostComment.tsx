@@ -12,6 +12,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useProfileImage } from '@/contexts/ProfileImageUrlContext';
 import { useUserName } from '@/contexts/UserNameContext';
 
+
 const PostComment = () => {
     const tw = useTailwind(); 
 
@@ -19,7 +20,6 @@ const PostComment = () => {
         email,
         setEmail
     } = useEmail(); 
-
     const { 
         profileImageUrl, 
         setProfileImageUrl
@@ -44,11 +44,13 @@ const PostComment = () => {
             setPostLoading(true)
             try {
                 await addDoc(collection(DB, 'Comment'), {
+                    comment_id: userName + new Date(), 
                     article_id: article_id,
                     comment: comment,
                     dateCreated: new Date(),
                     userName: userName, 
-                    imageUrl: profileImageUrl
+                    imageUrl: profileImageUrl, 
+                    lastModified: new Date(), 
                 })
                 setComment('');
             } catch (error) {
@@ -86,9 +88,9 @@ const PostComment = () => {
                         setProfileImageUrl(user.photoURL);
                 }
             })
-        } else {
-                getuserName();
-        }
+        } 
+        getuserName();
+        
         
     }, [])
   return (
@@ -110,7 +112,7 @@ const PostComment = () => {
                   setComment(comment)
               }}
               numberOfLines={4}
-              
+              readonly={postLoading}
               />
           </View>
           <View style={[tw("self-center pt-4"),{

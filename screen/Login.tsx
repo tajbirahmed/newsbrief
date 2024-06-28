@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
-
+// login button loading, 
 
 const Login = ({ 
     screen, 
