@@ -2,6 +2,10 @@
   position: absolute
 }
 
+.m-1 {
+  margin: 0.25rem
+}
+
 .m-4 {
   margin: 1rem
 }
@@ -15,16 +19,16 @@
   margin-right: 3rem
 }
 
+.mr-3 {
+  margin-right: 0.75rem
+}
+
 .mt-1 {
   margin-top: 0.25rem
 }
 
 .mt-10 {
   margin-top: 2.5rem
-}
-
-.mt-2 {
-  margin-top: 0.5rem
 }
 
 .flex {

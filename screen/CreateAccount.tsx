@@ -6,8 +6,8 @@ import { usePass } from '@/contexts/PasswordContext';
 import { DB, FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { RegisterPageType } from '@/types/RegisterPageType';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
+import { collection, doc, getDoc, getDocs, onSnapshot, query, setDoc } from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
@@ -40,9 +40,11 @@ const CreateAccount = ({
     const [userName, setUserName] = useState<string>(''); 
     const [errorUserName, setErrorUserName] = useState<boolean | null>(null); 
     const [userNameMessage, setUserNameMessage] = useState<string>('')
-    const [currentNames, setCurrentNames] = useState<Set<string>>(new Set<string>())
+    const [currentNames, setCurrentNames] = useState<string[]>([]);
     const [passStatus, setPassStatus] = useState<boolean | null>(null);
     const [passMessage, setPassMessage] = useState<string>('');
+    const initialLoad = useRef(true);
+
 
     const checkEmail = () => {
         if (email?.includes('.') && email?.includes('@')) { 
@@ -79,29 +81,30 @@ const CreateAccount = ({
 
     } 
 
-    const getUserNames = async () => {
-        if (userName.length > 3) {
-            const colRef = collection(DB, 'User');
-            try {
-                const docs = await getDocs(colRef);
-                docs.forEach((doc) => {
-                    setCurrentNames((prevSet) => new Set(prevSet).add(doc.data().userName))
-                })
+    // const getUserNames = async () => {
+    //     if (userName.length > 3) {
+    //         const colRef = collection(DB, 'User');
+    //         try {
+    //             const docs = await getDocs(colRef);
+    //             docs.forEach((doc) => {
+    //                 setCurrentNames((prevSet) => new Set(prevSet).add(doc.data().userName))
+    //             })
 
-            } catch (error) {
-                console.error(error);
-            }
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
 
-        }
-    }
+    //     }
+    // }
 
     const checkUserName = async () => {
         if (userName.length <= 3) {
             setErrorUserName(true)
             setUserNameMessage("Username must contain at least 4 letters");
         }
+        
         if (userName.length > 3) { 
-            if (currentNames.has(userName)) {
+            if (currentNames.includes(userName)) {
                 setErrorUserName(true); 
                 setUserNameMessage("Username already exists");
 
@@ -109,6 +112,11 @@ const CreateAccount = ({
                 setErrorUserName(false);
                 setUserNameMessage("Username is valid");
             }
+        }
+        if (/\s/.test(userName.trim())) { // Check for spaces
+            setErrorUserName(true);
+            setUserNameMessage("Username must not contain spaces");
+            return;
         }
         if (userName === '') {
             setErrorUserName(null);
@@ -170,8 +178,48 @@ const CreateAccount = ({
     }, [email]);
 
     useEffect(() => {
-        getUserNames();
-    }, []); 
+        const q = query(collection(DB, "User"));
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            
+            if (initialLoad.current) {
+                const initialUsers: string[] = [];
+                querySnapshot.forEach((doc) => {
+                    initialUsers.push(doc.data().userName as string);
+                });
+                setCurrentNames(initialUsers);
+                initialLoad.current = false; // Set initial load to false after the first load
+                
+            } else {
+                querySnapshot.docChanges().forEach((change) => {
+                    
+                    if (change.type === "added") {
+                        const newUserName = change.doc.data().userName as string;
+                        setCurrentNames((prevNames) => [...prevNames, newUserName]);
+                        console.log(newUserName);
+                        
+                        if (newUserName === userName) {
+                            setErrorUserName(true);
+                            setUserNameMessage("Username already exists");
+                        }
+                    } else if (change.type === "removed") {
+                        const deletedUserName = change.doc.data().userName as string;
+                        console.log(deletedUserName);
+                        setCurrentNames((prevNames) => prevNames.filter(name => name !== deletedUserName));
+                        if (deletedUserName === userName) {
+                            setErrorUserName(false);
+                            setUserNameMessage("Username is valid");
+                        }
+                    }
+                });
+            }
+        });
+
+        return () => {
+            unsubscribe();
+            initialLoad.current = true;
+        }
+    }, []);
 
     useEffect(() => {
         checkUserName();
@@ -211,7 +259,7 @@ const CreateAccount = ({
               setContent={setUserName}
               error={errorUserName}
               onChange={() => {
-                  setUserName(userName);
+                  setUserName(userName.trim());
               }}
 
           />

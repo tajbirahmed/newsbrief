@@ -10,7 +10,7 @@ import { Dimensions, Linking, Pressable, ScrollView } from 'react-native';
 import { ActivityIndicator, MD2Colors, MD3Colors, Paragraph } from 'react-native-paper';
 import { useTailwind } from 'tailwind-rn';
 import Constants from 'expo-constants';
-import { ChevronLeft, Martini } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { DarkTheme } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
 import RatingComp from '@/components/RatingComp';
@@ -18,6 +18,7 @@ import { getDataFromCache, saveDataToCache } from '@/utils/customCacheControl';
 import * as WebBrowser from 'expo-web-browser';
 import CustomButton from '@/components/CustomButton';
 import CommentComponent from '@/components/CommentComponent';
+import SummaryComponent from '@/components/SummaryComponent';
 
 
 
@@ -224,11 +225,10 @@ const ArtcileViewScreen = () => {
 									</View>
 								))}
 								</View>
-								<Pressable style={[tw("self-end flex flex-row items-center"), {
-									
-								}]}>
-									{/* Generate Summary */}
-								</Pressable>
+								<SummaryComponent
+								
+									text={article.description + article.full_description}
+								/>
 							<View style={{
 								marginVertical: 10, 
 							}}>
@@ -282,9 +282,9 @@ const ArtcileViewScreen = () => {
 									?
 										(
 											<>
-												<RatingComp />
+											{/* <RatingComp />*/}
 
-												<CommentComponent />
+												{/* <CommentComponent />  */}
 											</>
 										)
 									:

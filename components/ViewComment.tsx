@@ -159,6 +159,7 @@ const ViewComment = () => {
 				querySnapshot.docChanges().forEach((change) => {
 					if (change.type === "added") {
 						setComments((prev) => [change.doc.data() as CommentType, ...prev]);
+						console.log("Comment added: ", change.doc.id);
 					} else if (change.type === "modified") {
 						setComments((prev) =>
 							prev.map((comment) =>

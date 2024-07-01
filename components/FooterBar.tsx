@@ -5,6 +5,7 @@ import FooterItem from './FooterItem';
 import { Dimensions, Pressable } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScreen } from '@/contexts/ScreenContext';
+import { Globe } from 'lucide-react-native';
 
 
 const FooterBar = () => {
@@ -68,11 +69,10 @@ const FooterBar = () => {
                 />}
             />
             <FooterItem
-                title='Favorite'
-                icon={<MaterialIcons
+                title='Headline'
+                icon={<Globe
                     size={30}
-                    color={screen === 'Favorite' ? 'white' : 'gray'}
-                    name='favorite'
+                    color={screen === 'Headline' ? 'white' : 'gray'}
                     style={{
                         alignSelf: 'center',
                         borderRadius: 14,

@@ -4,6 +4,14 @@
 			"position": "absolute"
 		}
 	},
+	"m-1": {
+		"style": {
+			"marginTop": 4,
+			"marginRight": 4,
+			"marginBottom": 4,
+			"marginLeft": 4
+		}
+	},
 	"m-4": {
 		"style": {
 			"marginTop": 16,
@@ -23,6 +31,11 @@
 			"marginRight": 48
 		}
 	},
+	"mr-3": {
+		"style": {
+			"marginRight": 12
+		}
+	},
 	"mt-1": {
 		"style": {
 			"marginTop": 4
@@ -31,11 +44,6 @@
 	"mt-10": {
 		"style": {
 			"marginTop": 40
-		}
-	},
-	"mt-2": {
-		"style": {
-			"marginTop": 8
 		}
 	},
 	"flex": {
