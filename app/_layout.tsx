@@ -1,0 +1,27 @@
+import { AuthProvider } from '@/contexts/AuthContext';
+import { Slot } from 'expo-router'
+import React from 'react'
+
+import { TailwindProvider } from 'tailwind-rn';
+import utilities from '../tailwind.json';
+import { EmailProvider } from '@/contexts/EmailContext';
+
+export const unstable_settings = {
+    initialRouteName: '/',
+};
+
+const RootLayout = () => {
+    return (
+        <TailwindProvider utilities={utilities} colorScheme={"dark"} >
+            {/* <ThemeProvider value={bgval}> */}
+            <EmailProvider>
+                <AuthProvider>
+                    <Slot />
+                </AuthProvider>
+            </EmailProvider>
+            {/* </ThemeProvider> */ }
+        </TailwindProvider>
+    )
+}
+
+export default RootLayout
