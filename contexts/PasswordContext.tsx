@@ -11,6 +11,8 @@ interface EmailContextProps {
     children: ReactNode
 }
 
+// is this secure?
+
 const PassProvider: FC<EmailContextProps> = ({ children }) => {
     const [pass, setPass] = useState<string>('');
     return (

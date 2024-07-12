@@ -1,8 +1,15 @@
 import React, { FC, ReactNode, createContext, useContext, useState } from "react";
 
+export type DrawerContentType = 
+    "google-news"
+|   "settings"
+|   undefined
+
 interface DrawerType {
-    open: boolean,
-    setOpen: (open: boolean) => void
+    open: boolean; 
+    setOpen: (open: boolean) => void; 
+    selected: DrawerContentType; 
+    setSelected: (selected: DrawerContentType) => void;
 }
 
 
@@ -14,11 +21,14 @@ interface EmailContextProps {
 }
 
 const DrawerProvider: FC<EmailContextProps> = ({ children }) => {
-    const [open, setOpen] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(true); 
+    const [selected, setSelected] = useState<DrawerContentType>(undefined)
     return (
         <DrawerContext.Provider value={{
             open,
-            setOpen
+            setOpen,
+            selected, 
+            setSelected
         }}>
             {children}
         </DrawerContext.Provider>

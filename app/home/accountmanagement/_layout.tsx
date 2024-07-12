@@ -13,13 +13,15 @@ const ProfileEditLayout = () => {
     return (
         <View style={[tw("flex flex-col"), {flex: 1}]}>
             <View style={[tw("flex flex-row items-center"), {
-                marginTop: Constants.statusBarHeight + 10, 
+                marginTop: Constants.statusBarHeight + 12, 
                 justifyContent: 'flex-start',
                 paddingBottom: 5,
+                marginLeft: 5,
+                // marginTop: 2,
             }]}>
-                <Pressable style={[tw(""), {
+                <Pressable style={[tw("pl-2"), {
                 }]}>
-                    <ChevronLeft size={30} color={'white'}  />
+                    <ChevronLeft size={20} color={'white'}  />
                 </Pressable>
                 <View style={[, tw("items-center"), {
                     flexDirection: 'row',
@@ -29,9 +31,9 @@ const ProfileEditLayout = () => {
                     zIndex: -10, 
                 }]}>
                     <Text style={[tw("font-bold text-lg"), {
-                        fontSize: 26,
+                        fontSize: 20,
                     }]}>
-                        Edit Profile
+                        Account Management
                     </Text>
                     <Divider style={{marginBottom: 5}} />
                 </View>

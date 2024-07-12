@@ -38,6 +38,7 @@
     "react-native": "0.74.2",
     "react-native-bcrypt": "^2.4.0",
     "react-native-drawer-layout": "^3.3.0",
+    "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-paper": "^5.12.3",
     "react-native-reanimated": "~3.10.1",
@@ -46,7 +47,8 @@
     "react-native-web": "~0.19.10",
     "react-native-webview": "13.8.6",
     "react-native-youtube-iframe": "^2.3.0",
-    "tailwind-rn": "^4.2.0"
+    "tailwind-rn": "^4.2.0",
+    "@react-native-community/datetimepicker": "8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -3,9 +3,9 @@ import { View } from './Themed'
 import { useTailwind } from 'tailwind-rn'
 import FooterItem from './FooterItem';
 import { Dimensions, Pressable } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScreen } from '@/contexts/ScreenContext';
-import { Globe } from 'lucide-react-native';
+
 
 
 const FooterBar = () => {
@@ -70,17 +70,18 @@ const FooterBar = () => {
             />
             <FooterItem
                 title='Headline'
-                icon={<Globe
+                icon={<Feather
                     size={30}
                     color={screen === 'Headline' ? 'white' : 'gray'}
+                    name='globe'
                     style={{
                         alignSelf: 'center',
                         borderRadius: 14,
                         borderColor: '#454559',
-                        paddingVertical: screen === 'Favorite' ? 2 : 1, 
+                        paddingVertical: screen === 'Headline' ? 2 : 1, 
                         paddingHorizontal: 18,
-                        borderWidth: screen === 'Favorite' ? 0.5 : 0,
-                        backgroundColor: screen === 'Favorite' ? '#454559' : '#211f24',
+                        borderWidth: screen === 'Headline' ? 0.5 : 0,
+                        backgroundColor: screen === 'Headline' ? '#454559' : '#211f24',
 
                     }}
                 />}

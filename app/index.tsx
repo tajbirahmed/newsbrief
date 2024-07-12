@@ -5,7 +5,7 @@ import { PassProvider } from '@/contexts/PasswordContext';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import CreateAccount from '@/screen/CreateAccount';
 import Login from '@/screen/Login';
-import { Redirect, router } from 'expo-router';
+import {  router } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 
 import React, { useEffect, useState } from 'react'
@@ -33,7 +33,7 @@ const Home = () => {
 
 	useEffect(() => {
 		if (user) {
-			router.replace("/home/app/headline/");
+			router.replace("/home/app/");
 		}
 	}, [user]);
 	

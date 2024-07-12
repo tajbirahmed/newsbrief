@@ -13,6 +13,10 @@ interface ProfileImageUrlContextProps {
     children: ReactNode
 }
 
+// get rid of this context, 
+// instead use create a context 
+// of type User from firebase
+
 const ProfileImageUrlProvider: FC<ProfileImageUrlContextProps> = ({ children }) => {
     const [profileImageUrl, setProfileImageUrl] = useState<string>(''); 
     useEffect(() => {

@@ -11,6 +11,13 @@ interface EmailContextProps {
     children: ReactNode
 }
 
+// get rid of this context, 
+// instead use create a context 
+// of type User from firebase
+// also, it is begin used as sudo glbal state, 
+// so that we can access it from anywhere in the app, 
+// can we replace it with AuthContext? 
+
 const EmailProvider: FC<EmailContextProps> = ({ children }) => {
     const [email, setEmail] = useState<string | null>(null)
     return (

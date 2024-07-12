@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, createContext, useContext, useState } from "react";
 
+
 interface UserNameContextType {
     userName: string,
     setUserName: (comment: string) => void
@@ -11,8 +12,16 @@ interface UserNameContextProps {
     children: ReactNode
 }
 
+// get rid of this context, 
+// instead use create a context 
+// of type User from firebase
+// although userName is coming from User 
+// collection. --- More on this later
+
 const UserNameProvider: FC<UserNameContextProps> = ({ children }) => {
     const [userName, setUserName] = useState<string>('');
+
+
     return (
         <UserNameContext.Provider value={{
             userName,
